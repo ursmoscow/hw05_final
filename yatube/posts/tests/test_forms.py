@@ -64,15 +64,14 @@ class PostCreateFormTests(TestCase):
             follow=True
         )
         new_post = Post.objects.first()
+
+        image_url = new_post.image.url
+        response = self.client.get(image_url)
+        self.assertEqual(response.status_code, 200)
+
         self.assertRedirects(response, reverse(
             'posts:profile', args=(new_post.author,)))
         self.assertEqual(Post.objects.count(), post_count + 1)
-        self.assertTrue(
-            Post.objects.filter(
-                text=new_post.text,
-                image=new_post.image
-            ).exists
-        )
         self.assertEqual(form_data['text'], new_post.text)
         self.assertEqual(self.test_user, new_post.author)
         self.assertEqual(self.group, new_post.group)
