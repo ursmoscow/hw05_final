@@ -72,7 +72,7 @@ class PostCreateFormTests(TestCase):
         self.assertEqual(self.test_user, new_post.author)
         self.assertEqual(self.group, new_post.group)
         self.assertIsNotNone(new_post.image)
-        self.assertEqual(new_post.image.read(), small_gif)
+        self.assertEqual(new_post.image.read(), uploaded.read())
 
     def test_not_create_post_no_authorized_client(self):
         """Неавторизованный клиент, не может создать
