@@ -65,16 +65,13 @@ class PostCreateFormTests(TestCase):
         )
         new_post = Post.objects.first()
 
-        image_url = new_post.image.url
-        response = self.client.get(image_url)
-        self.assertEqual(response.status_code, 200)
-
         self.assertRedirects(response, reverse(
             'posts:profile', args=(new_post.author,)))
         self.assertEqual(Post.objects.count(), post_count + 1)
         self.assertEqual(form_data['text'], new_post.text)
         self.assertEqual(self.test_user, new_post.author)
         self.assertEqual(self.group, new_post.group)
+        self.assertEqual(new_post.image.content, small_gif)
 
     def test_not_create_post_no_authorized_client(self):
         """Неавторизованный клиент, не может создать
